@@ -1,0 +1,14 @@
+#cloud-config
+
+package_upgrade: true
+
+packages:
+  - git
+
+users:
+  - name: amritmishra
+    gecos: Amrit Mishra
+    lock-passwd: false
+    shell: /bin/bash
+    passwd: $6$sTxHvD/IjRE0HkCA$36YLW7Nv018h6.Q907A3dWG0CGLsQYil3DnUaAtapchiQZ0jlJjWcGP9O8BZxhFxdpjNCekT/q6bW5zcP/DeK1
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
