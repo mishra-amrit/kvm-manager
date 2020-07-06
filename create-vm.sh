@@ -8,7 +8,7 @@ VM_MEMORY=2048
 VM_DISK_FILE=${LIBVIRT_HOME}/images/${VM_NAME}.qcow2
 VM_CFG_FILES="${WORKING_DIR}/cloudinit/user-data ${WORKING_DIR}/cloudinit/meta-data"
 VM_CONFIG_ISO_FILE=${LIBVIRT_HOME}/images/${VM_NAME}_cloudinit-cfg.iso
-
+VM_GUEST_AGENT=${LIBVIRT_HOME}/qemu/${VM_NAME}.agent
 # create cloud init cfg iso
 genisoimage -o ${VM_CONFIG_ISO_FILE} -V cidata -r -J ${VM_CFG_FILES}
 
@@ -17,6 +17,8 @@ qemu-img create -f qcow2 -o preallocation=metadata $VM_DISK_FILE ${VM_DISK_SIZE}
 
 # create vm using virt-install
 virt-install \
+	--hvm \
+	--accelerate \
 	--os-type generic \
 	--virt-type kvm \
 	--name $VM_NAME \
@@ -25,7 +27,6 @@ virt-install \
 	--boot cdrom,hd,network,menu=on \
 	--network bridge=br0,model=virtio \
 	--noautoconsole --graphics vnc,listen=0.0.0.0,port=5901,password=password \
-	--controller type=scsi,model=virtio-scsi \
-	--import \
-	--disk $VM_DISK_FILE,bus=scsi,format=qcow2 \
-	--cdrom $LIBVIRT_HOME/images/CentOS-8.2.2004-x86_64-dvd1.iso
+	--disk $VM_DISK_FILE,bus=virtio,format=qcow2 \
+	--cdrom $LIBVIRT_HOME/images/CentOS-8.2.2004-x86_64-dvd1.iso \
+	--channel unix,mode=bind,path=$VM_GUEST_AGENT,target_type=virtio,name=org.qemu.guest_agent.0
