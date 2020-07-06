@@ -12,9 +12,8 @@ virsh snapshot-create-as \
 	--domain $VM_NAME \
 	--name "bkp-${TIMESTAMP}" \
 	--atomic \
-	--quiesce \
-	--disk-only \
 	--diskspec vda,file=$VM_DISK_FILE,snapshot=external \
+	--memspec file=$VM_MEM_FILE,snapshot=external \
 	--no-metadata
 
-virsh blockcommit $VM_NAME vda --active --pivot
+virsh blockcommit $VM_NAME vda --active --pivot --verbose
