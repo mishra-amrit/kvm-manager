@@ -25,7 +25,7 @@ virsh snapshot-create-as \
 echo "snapshot created."
 
 echo "archiving snapshot.."
-dd if=/var/lib/libvirt/images/centos8.qcow2 | gzip | dd of=$VM_ARCHIVE_FILE bs=4096
+dd if=/var/lib/libvirt/images/centos8.qcow2 | gzip | dd of=$VM_ARCHIVE_FILE bs=4096 status=progress
 echo "snapshot archived."
 
 echo "releasing filesystem."
